@@ -8,10 +8,57 @@ using UnityEngine;
  * Should only be created once per project
  * If you want to add / query tags, do it here
  */
-[CreateAssetMenu(fileName = "GameplayTag", menuName = "ScriptableObjects/GameplayTag", order = 1)]
+[CreateAssetMenu(fileName = "GameplayTags", menuName = "ScriptableObjects/GameplayTags", order = 1)]
 public class GameplayTags : ScriptableObject
 {
-    public GameplayTagContainer Tags = new();
+    public GameplayTagSourceContainer Container = new();
+
+    private static GameplayTags Instance;
+
+    public void AddTag(string Tag)
+    {
+        Container.AddTag(Tag);
+    }
+    
+    public static List<int> ConvertToIndices(string Tag)
+    {
+        if (Instance == null)
+            return new();
+
+        List<int> Indices = new();
+        string[] Tokens = Tag.Split(GameplayTagToken.Divisor);
+        int TokenIndex = 0;
+        for (int i = 0; i < Instance.Container.Tags.Count; i++)
+        {
+            if (Instance.Container.Tags[i].Token.Equals(Tokens[TokenIndex]))
+                continue;
+
+            if (Instance.Container.Tags[i].Depth != TokenIndex)
+                continue;
+
+            Indices.Add(i);
+            TokenIndex++;
+        }
+
+        // we only got a partial match, doesn't count so reset
+        if (TokenIndex < Tokens.Length)
+        {
+            return new();
+        }
+        return Indices;
+    }
+
+    public static GameplayTagMask ConvertTagToMask(string Tag)
+    {
+        GameplayTagMask Mask = new();
+        Mask.SetIndices(ConvertToIndices(Tag));
+        return Mask;
+    }
+
+    public void SetInstance()
+    {
+        Instance = this;
+    }
 
     public GameplayTags()
     {
@@ -19,8 +66,8 @@ public class GameplayTags : ScriptableObject
         string Test2 = "Tag.Element.Cold";
         string Test3 = "Tag.Damage.Fire";
 
-        Tags.Add(Test1);
-        Tags.Add(Test2);
-        Tags.Add(Test3);
+        Container.AddTag(Test1);
+        Container.AddTag(Test2);
+        Container.AddTag(Test3);
     }
 }

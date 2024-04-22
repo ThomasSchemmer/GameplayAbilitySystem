@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe67eaf2510f3d942add43c4c5a18c70, type: 3}
+  m_Name: GameplayTags
+  m_EditorClassIdentifier: 
+  Container:
+    Tags:
+    - ID: 626f2467-9afe-458d-a9db-b8ae0a3a287f
+      Token: Tag
+      Depth: 0
+      bIsFolded: 0
+    - ID: 47462c53-0f97-4c38-84eb-0e11fde7a0e3
+      Token: Heal
+      Depth: 1
+      bIsFolded: 0
+    - ID: cc719b61-f8f7-4b66-9000-467e31c40f97
+      Token: Holy
+      Depth: 2
+      bIsFolded: 0
+    - ID: 30897c6d-2fc5-4c89-a8e6-f7aa016df917
+      Token: Damage
+      Depth: 1
+      bIsFolded: 0
+    - ID: b59999b4-299f-4cc8-baaa-ae2a7a58ced0
+      Token: Fire
+      Depth: 2
+      bIsFolded: 0
+    - ID: 2c0fe617-a29e-4819-9f1d-8bc110d10266
+      Token: Element
+      Depth: 1
+      bIsFolded: 0
+    - ID: 6ff950b9-a065-41ef-b674-d17e8369c296
+      Token: Cold
+      Depth: 2
+      bIsFolded: 0
+    - ID: 01ce12ac-b293-451c-af6b-1b267871ae7e
+      Token: Fire
+      Depth: 2
+      bIsFolded: 0

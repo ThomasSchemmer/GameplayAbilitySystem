@@ -4,6 +4,9 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+/** Custom display for a single token, mostly used for displaying source tokens
+ * unlike the regular tokens, these ones have additional buttons as well as a editable textfield to be displayed
+ */
 [CustomPropertyDrawer(typeof(GameplayTagToken))]
 public class GameplayTagTokenDrawer : PropertyDrawer
 {
@@ -14,15 +17,21 @@ public class GameplayTagTokenDrawer : PropertyDrawer
         SerializedProperty TokenProperty = GameplayTagTokenProperty.FindPropertyRelative("Token");
         SerializedProperty DepthProperty = GameplayTagTokenProperty.FindPropertyRelative("Depth");
 
-        string Token = TokenProperty.stringValue;
         int Depth = DepthProperty.intValue;
         Rect Rect = new Rect(Position.x + Depth * Indent + ButtonSize, Position.y, Position.width, Height);
-        Rect TextRect = new Rect(Rect.x, Rect.y, 100, Rect.height);
-        TokenProperty.stringValue = EditorGUI.DelayedTextField(TextRect, Token);
+
+        DrawTokenForSource(Rect, TokenProperty);
 
         DrawButtons(Rect, GameplayTagTokenProperty);
 
         EditorGUI.EndProperty();
+    }
+
+    private void DrawTokenForSource(Rect Rect, SerializedProperty TokenProperty)
+    {
+        Rect TextRect = new Rect(Rect.x, Rect.y, 100, Rect.height);
+        string Token = TokenProperty.stringValue;
+        TokenProperty.stringValue = EditorGUI.DelayedTextField(TextRect, Token);
     }
 
     private void DrawButtons(Rect Rect, SerializedProperty GameplayTagTokenProperty)
@@ -39,7 +48,7 @@ public class GameplayTagTokenDrawer : PropertyDrawer
             CreateNewEntryAt(Index, TagsProperty);
         }
 
-        if (!HasChildElements(Index, TagsProperty))
+        if (!ContainerDrawerLibrary.HasChildElements(Index, TagsProperty))
         {
             if (GUI.Button(ButtonRectRemove, "-"))
             {
@@ -50,7 +59,7 @@ public class GameplayTagTokenDrawer : PropertyDrawer
 
     private void DrawFoldButton(Rect Rect, int i,  SerializedProperty TagsProperty)
     {
-        if (!HasChildElements(i, TagsProperty))
+        if (!ContainerDrawerLibrary.HasChildElements(i, TagsProperty))
             return;
 
         Rect ButtonRectFold = new Rect(Rect.x - ButtonSize, Rect.y + ButtonOffsetY, ButtonSize, ButtonSize);
@@ -69,22 +78,6 @@ public class GameplayTagTokenDrawer : PropertyDrawer
         SerializedProperty TagProp = TagsProperty.GetArrayElementAtIndex(i);
         SerializedProperty IsFoldedProp = TagProp.FindPropertyRelative("bIsFolded");
         IsFoldedProp.boolValue = !IsFoldedProp.boolValue;
-    }
-
-    private bool HasChildElements(int i, SerializedProperty TagsProperty)
-    {
-        if (TagsProperty.arraySize == 1)
-            return true;
-
-        if (i == TagsProperty.arraySize - 1)
-            return false;
-
-        SerializedProperty Self = TagsProperty.GetArrayElementAtIndex(i);
-        SerializedProperty Other = TagsProperty.GetArrayElementAtIndex(i + 1);
-        SerializedProperty SelfDepthProp = Self.FindPropertyRelative("Depth");
-        SerializedProperty OtherDepthProp = Other.FindPropertyRelative("Depth");
-
-        return SelfDepthProp.intValue == OtherDepthProp.intValue - 1;
     }
 
     private void CreateNewEntryAt(int i, SerializedProperty TagsProperty)
@@ -112,9 +105,9 @@ public class GameplayTagTokenDrawer : PropertyDrawer
         return Height;
     }
 
-    private static float ButtonSize = 15;
-    private static float Height = 20;
-    private static float ButtonOffsetX = -15;
-    private static float ButtonOffsetY = (Height - ButtonSize) / 2.0f;
-    private static float Indent = 10;
+    public static float ButtonSize = 15;
+    public static float Height = 20;
+    public static float ButtonOffsetX = -15;
+    public static float ButtonOffsetY = (Height - ButtonSize) / 2.0f;
+    public static float Indent = 10;
 }
