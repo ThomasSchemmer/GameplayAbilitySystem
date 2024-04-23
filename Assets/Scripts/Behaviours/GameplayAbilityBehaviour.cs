@@ -13,16 +13,16 @@ public class GameplayAbilityBehaviour : MonoBehaviour
         });
     }
 
-    public void AddTag(string Tag) {
-        GameplayTagMask.AddTag(Tag);
+    public void AddTag(string ID) {
+        GameplayTagMask.Set(ID);
 
         _OnTagsChanged?.Invoke();
-        _OnTagAdded?.Invoke(Tag);
+        _OnTagAdded?.Invoke(ID);
     }
 
     public bool HasTag(string Tag)
     {
-        return GameplayTagMask.HasTag(Tag);
+        return GameplayTagMask.HasID(Tag);
     }
 
     [SerializeField]

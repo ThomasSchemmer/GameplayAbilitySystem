@@ -29,9 +29,9 @@ public class ContainerRegularDrawerLibrary : ContainerDrawerLibrary
     {
         Dictionary<int, string> TokenDic = new();
 
-        for (int i = 0; i < GlobalGameplayTags.Container.Tags.Count; i++)
+        for (int i = 0; i < GlobalGameplayTags.Container.Tokens.Count; i++)
         {
-            GameplayTagToken Token = GlobalGameplayTags.Container.Tags[i];
+            GameplayTagToken Token = GlobalGameplayTags.Container.Tokens[i];
 
             UpdateDic(TokenDic, Token.Token, Token.Depth);
 
@@ -50,9 +50,9 @@ public class ContainerRegularDrawerLibrary : ContainerDrawerLibrary
 
         EditorGUILayout.BeginVertical();
 
-        for (int i = 0; i < GlobalGameplayTags.Container.Tags.Count; i++)
+        for (int i = 0; i < GlobalGameplayTags.Container.Tokens.Count; i++)
         {
-            GameplayTagToken Token = GlobalGameplayTags.Container.Tags[i];
+            GameplayTagToken Token = GlobalGameplayTags.Container.Tokens[i];
 
             UpdateDic(TokenDic, Token.Token, Token.Depth);
 
@@ -72,7 +72,7 @@ public class ContainerRegularDrawerLibrary : ContainerDrawerLibrary
     {
         EditorGUILayout.BeginHorizontal();
 
-        List<GameplayTagToken> Tokens = GlobalGameplayTags.Container.Tags;
+        List<GameplayTagToken> Tokens = GlobalGameplayTags.Container.Tokens;
         GameplayTagToken GlobalToken = Tokens[i];
 
         EditorGUILayout.Space(GameplayTagTokenDrawer.Indent * GlobalToken.Depth);
@@ -113,54 +113,13 @@ public class ContainerRegularDrawerLibrary : ContainerDrawerLibrary
             if (!bAllowPartial)
                 continue;
 
-            if (!IsParentInProperty(GlobalGameplayTags, LocalIDsProperty, LocalID, TokenID))
+            if (!GlobalGameplayTags.IsIDFromParent(LocalID, TokenID))
                 continue;
 
             return true;
         }
 
         return false;
-    }
-
-    protected static bool IsParentInProperty(GameplayTags GlobalGameplayTags, SerializedProperty LocalIDsProperty, string ChildID, string IDToMatch)
-    {
-        if (ChildID.Equals(IDToMatch)) 
-            return true;
-
-        int LocalIndex = GetSelfIndex(GlobalGameplayTags, ChildID);
-        if (LocalIndex == -1)
-            return false;
-
-        int LocalParentIndex = GetParentIndex(GlobalGameplayTags, LocalIndex);
-        if (LocalParentIndex == -1)
-            return false;
-
-        GameplayTagToken LocalParent = GlobalGameplayTags.Container.Tags[LocalParentIndex];
-
-        return IsParentInProperty(GlobalGameplayTags, LocalIDsProperty, LocalParent.ID, IDToMatch);
-    }
-
-    protected static int GetParentIndex(GameplayTags GlobalGameplayTags, int Index)
-    {
-        GameplayTagToken Child = GlobalGameplayTags.Container.Tags[Index];
-        // parents have to come before hand, so we can go backwards
-        for (int i = Index; i >= 0; i--) {
-            GameplayTagToken PotentialParent = GlobalGameplayTags.Container.Tags[i];
-            if (PotentialParent.Depth == Child.Depth - 1)
-                return i;
-        }
-        return -1;
-    }
-
-    protected static int GetSelfIndex(GameplayTags GlobalGameplayTags, string ID)
-    {
-        for (int i = 0; i < GlobalGameplayTags.Container.Tags.Count; i++)
-        {
-            GameplayTagToken PotentialSelf = GlobalGameplayTags.Container.Tags[i];
-            if (PotentialSelf.ID.Equals(ID))
-                return i;
-        }
-        return -1;
     }
 
     protected static void SetIDInProperty(string ID, SerializedProperty IDsProperty, bool bShouldBeContained)
@@ -184,11 +143,6 @@ public class ContainerRegularDrawerLibrary : ContainerDrawerLibrary
                 IDsProperty.DeleteArrayElementAtIndex(i);
             }
         }
-    }
-
-    public static GameplayTags LoadGlobalGameplayTags()
-    {
-        return Resources.Load("GameplayTags") as GameplayTags; 
     }
 
     public static void DisplayButtons(GameplayTags GlobalGameplayTags)
@@ -217,9 +171,9 @@ public class ContainerRegularDrawerLibrary : ContainerDrawerLibrary
 
     public static void FoldAll(GameplayTags GlobalGameplayTags, bool bIsFolded)
     {
-        for (int i = 0; i < GlobalGameplayTags.Container.Tags.Count; i++)
+        for (int i = 0; i < GlobalGameplayTags.Container.Tokens.Count; i++)
         {
-            GameplayTagToken Token = GlobalGameplayTags.Container.Tags[i];
+            GameplayTagToken Token = GlobalGameplayTags.Container.Tokens[i];
 
             Token.bIsFolded = bIsFolded;
         }

@@ -12,52 +12,77 @@ using UnityEngine;
 public class GameplayTags : ScriptableObject
 {
     public GameplayTagSourceContainer Container = new();
-
-    private static GameplayTags Instance;
+    static GameplayTags GlobalTags = null;
 
     public void AddTag(string Tag)
     {
         Container.AddTag(Tag);
     }
     
-    public static List<int> ConvertToIndices(string Tag)
+    public int GetParentIndex(int Index)
     {
-        if (Instance == null)
-            return new();
-
-        List<int> Indices = new();
-        string[] Tokens = Tag.Split(GameplayTagToken.Divisor);
-        int TokenIndex = 0;
-        for (int i = 0; i < Instance.Container.Tags.Count; i++)
+        GameplayTagToken Child = Container.Tokens[Index];
+        // parents have to come before hand, so we can go backwards
+        for (int i = Index; i >= 0; i--)
         {
-            if (Instance.Container.Tags[i].Token.Equals(Tokens[TokenIndex]))
-                continue;
-
-            if (Instance.Container.Tags[i].Depth != TokenIndex)
-                continue;
-
-            Indices.Add(i);
-            TokenIndex++;
+            GameplayTagToken PotentialParent = Container.Tokens[i];
+            if (PotentialParent.Depth == Child.Depth - 1)
+                return i;
         }
-
-        // we only got a partial match, doesn't count so reset
-        if (TokenIndex < Tokens.Length)
-        {
-            return new();
-        }
-        return Indices;
+        return -1;
     }
 
-    public static GameplayTagMask ConvertTagToMask(string Tag)
+    public bool TryGetParentID(string ID, out string ParentID)
     {
-        GameplayTagMask Mask = new();
-        Mask.SetIndices(ConvertToIndices(Tag));
-        return Mask;
+        ParentID = default;
+        int SelfIndex = GetSelfIndex(ID);
+        if (SelfIndex == -1)
+            return false;
+
+        int ParentIndex = GetParentIndex(SelfIndex);
+        if (ParentIndex == -1)
+            return false;
+
+        ParentID = Container.Tokens[ParentIndex].ID;
+        return true;
     }
 
-    public void SetInstance()
+    public int GetSelfIndex(string ID)
     {
-        Instance = this;
+        for (int i = 0; i < Container.Tokens.Count; i++)
+        {
+            GameplayTagToken PotentialSelf = Container.Tokens[i];
+            if (PotentialSelf.ID.Equals(ID))
+                return i;
+        }
+        return -1;
+    }
+
+    public bool IsIDFromParent(string ChildID, string IDToMatch)
+    {
+        if (ChildID.Equals(IDToMatch))
+            return true;
+
+        int LocalIndex = GetSelfIndex(ChildID);
+        if (LocalIndex == -1)
+            return false;
+
+        int LocalParentIndex = GetParentIndex(LocalIndex);
+        if (LocalParentIndex == -1)
+            return false;
+
+        GameplayTagToken LocalParent = Container.Tokens[LocalParentIndex];
+
+        return IsIDFromParent(LocalParent.ID, IDToMatch);
+    }
+
+    public static GameplayTags Get()
+    {
+        if (GlobalTags == null)
+        {
+            GlobalTags = Resources.Load("GameplayTags") as GameplayTags;
+        }
+        return GlobalTags;
     }
 
     public GameplayTags()
@@ -70,4 +95,5 @@ public class GameplayTags : ScriptableObject
         Container.AddTag(Test2);
         Container.AddTag(Test3);
     }
+
 }

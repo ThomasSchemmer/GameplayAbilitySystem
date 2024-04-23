@@ -3,54 +3,52 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /** Inner representation of GameplayTags.
- * Each bool represents one token, so currently up to a maximum of 256 full Tags are supported
- * In theory could have been a long and mask directly, but that would only support up to 64 tokens
+ * Since we are already identifying the tags by GUID string, we can just place them in a set
  */
 public class GameplayTagMask 
 {
-    private bool[] Mask = new bool[256];
+    private HashSet<string> Mask;
 
-    public void Set(int i)
+    public void Set(string ID)
     {
-        Mask[i] = true;
+        if (Mask.Contains(ID))
+            return;
+
+        Mask.Add(ID);
     }
 
-    public void Clear(int i)
+    public void Clear(string ID)
     {
-        Mask[i] = false;
+        if (!Mask.Contains(ID))
+            return;
+
+        Mask.Remove(ID);
     }
 
-    public void SetIndices(List<int> Indices)
+    public void SetIDs(List<string> IDs)
     {
-        foreach (int Index in Indices)
+        foreach (string ID in IDs)
         {
-            Mask[Index] = true;
+            Set(ID);
         }
     }
 
-    public void AddTag(string Tag)
+    public bool HasID(string ID, bool bAllowPartial = false)
     {
-        GameplayTagMask NewMask = GameplayTags.ConvertTagToMask(Tag);
-        Combine(NewMask);
-    }
+        if (Mask.Contains(ID))
+            return true;
 
-    public bool HasTag(string Tag)
-    {
-        List<int> Indices = GameplayTags.ConvertToIndices(Tag);
-        for (int i = 0; i < Indices.Count; i++)
-        {
-            if (!Mask[i])
-                return false;
-        }
+        if (!bAllowPartial)
+            return false;
 
-        return true;
+        if (GameplayTags.Get().TryGetParentID(ID, out string ParentID))
+            return false;
+
+        return HasID(ParentID, bAllowPartial);
     }
 
     public void Combine(GameplayTagMask OtherMask)
     {
-        for (int i = 0; i < Mask.Length; i++)
-        {
-            Mask[i] |= OtherMask.Mask[i]; 
-        }
+        Mask.UnionWith(OtherMask.Mask);
     }
 }

@@ -401,9 +401,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Container:
     IDs:
-    - ecbe1200-1857-4ca5-a99a-ff5bc703b44a
-    - b59999b4-299f-4cc8-baaa-ae2a7a58ced0
-    bIsEditing: 1
+    - de016bd3-9b81-43a0-a762-babadd01b3ea
+    bIsEditing: 0
 --- !u!4 &1201811378
 Transform:
   m_ObjectHideFlags: 0

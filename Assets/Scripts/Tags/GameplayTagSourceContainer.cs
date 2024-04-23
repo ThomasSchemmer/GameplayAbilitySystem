@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class GameplayTagSourceContainer
 {
     [HideInInspector]
-    public List<GameplayTagToken> Tags = new();
+    public List<GameplayTagToken> Tokens = new();
 
     /** Iterates over all available tags and inserts the new at the target position (or at the end) 
      * This algorithm is also duplicated in the ..Drawer class due to the serialized property stuff
@@ -22,9 +22,9 @@ public class GameplayTagSourceContainer
         int FoundDepth = -1;
         int TokenIndex = 0;
         int FoundIndex = -1;
-        for (int i = 0; i < Tags.Count; i++)
+        for (int i = 0; i < this.Tokens.Count; i++)
         {
-            GameplayTagToken Target = Tags[i];
+            GameplayTagToken Target = this.Tokens[i];
 
             // a previous one was mismatched
             if (Target.Depth != TokenIndex)
@@ -40,7 +40,7 @@ public class GameplayTagSourceContainer
 
         if (FoundIndex == -1)
         {
-            FoundIndex = Tags.Count - 1;
+            FoundIndex = this.Tokens.Count - 1;
             FoundDepth = -1;
         }
 
@@ -50,9 +50,22 @@ public class GameplayTagSourceContainer
             int TargetIndex = FoundIndex + 1 + InsertCount;
             int NewDepth = FoundDepth + 1 + InsertCount;
             GameplayTagToken NewToken = new(Tokens[i], NewDepth, false);
-            Tags.Insert(TargetIndex, NewToken);
+            this.Tokens.Insert(TargetIndex, NewToken);
 
             InsertCount++;
         }
+    }
+
+    public bool TryGetByID(string ID, out GameplayTagToken FoundToken)
+    {
+        foreach (GameplayTagToken Token in Tokens)
+        {
+            FoundToken = Token;
+            if (Token.ID.Equals(ID))
+                return true;
+        }
+
+        FoundToken = null;
+        return false;
     }
 }

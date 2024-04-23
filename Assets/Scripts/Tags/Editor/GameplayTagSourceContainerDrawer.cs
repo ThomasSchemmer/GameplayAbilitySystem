@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
  * supports creation of new tags by inserting tokens into the global truth
  */
 [CustomPropertyDrawer(typeof(GameplayTagSourceContainer))]
-public class GameplayTagTokenContainerDrawer : PropertyDrawer
+public class GameplayTagSourceContainerDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect Position, SerializedProperty GameplayTagContainerProperty, GUIContent Label)
     {

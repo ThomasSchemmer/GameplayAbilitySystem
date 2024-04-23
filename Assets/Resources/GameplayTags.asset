@@ -27,7 +27,7 @@ MonoBehaviour:
       Depth: 2
       bIsFolded: 0
     - ID: 30897c6d-2fc5-4c89-a8e6-f7aa016df917
-      Token: Damage
+      Token: SpellDamage
       Depth: 1
       bIsFolded: 0
     - ID: b59999b4-299f-4cc8-baaa-ae2a7a58ced0

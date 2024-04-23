@@ -11,4 +11,16 @@ public class GameplayTagRegularContainer
 {
     public List<string> IDs = new();
     public bool bIsEditing = false;
+
+    public void Verify()
+    {
+        GameplayTags GameplayTags = GameplayTags.Get();
+        for (int i = IDs.Count; i >= 0; i--)
+        {
+            if (GameplayTags.GetSelfIndex(IDs[i]) != -1)
+                continue;
+
+            IDs.Remove(IDs[i]);
+        }
+    }
 }
