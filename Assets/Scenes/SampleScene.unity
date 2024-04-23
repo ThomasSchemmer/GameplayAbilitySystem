@@ -277,7 +277,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c553966b72c6752409f5de7fd3082cbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Services: []
+  Services:
+  - TargetScript: {fileID: 960883525}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,8 +381,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1201811378}
   - component: {fileID: 1201811377}
+  - component: {fileID: 1201811379}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -399,10 +401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7de4d79c14c093408c9bb48ab221f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Container:
-    IDs:
-    - de016bd3-9b81-43a0-a762-babadd01b3ea
-    bIsEditing: 0
+  Attributes: {fileID: 11400000, guid: 2cd8250a83fb13e45a43327166e53ba4, type: 2}
 --- !u!4 &1201811378
 Transform:
   m_ObjectHideFlags: 0
@@ -418,6 +417,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1201811379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201811376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 999d63121281ccf40a2357703ecb0751, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BurnEffect: {fileID: 11400000, guid: f5153a9171b8ca74f9a3947225c1a1a2, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

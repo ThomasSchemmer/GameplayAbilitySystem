@@ -31,13 +31,9 @@ public class GameplayTagRegularContainerDrawer : PropertyDrawer
             return;
         }
 
-        EditorGUILayout.BeginHorizontal();
-        SerializedProperty EditingProperty = GameplayTagContainerProperty.FindPropertyRelative("bIsEditing");
-        EditingProperty.boolValue = EditorGUILayout.Toggle("", EditingProperty.boolValue, GUILayout.MaxWidth(15));
-        EditorGUILayout.LabelField("Edit", GUILayout.MaxWidth(50));
-        GUILayout.FlexibleSpace();
-        EditorGUILayout.EndHorizontal();
-        if (EditingProperty.boolValue)
+        bool bIsEditing = DrawEditing(GameplayTagContainerProperty);
+
+        if (bIsEditing)
         {
             SerializedProperty IDsProperty = GameplayTagContainerProperty.FindPropertyRelative("IDs");
             ContainerRegularDrawerLibrary.DisplayButtons(GlobalGameplayTags);
@@ -47,6 +43,28 @@ public class GameplayTagRegularContainerDrawer : PropertyDrawer
 
         ContainerRegularDrawerLibrary.DisplayRegularTags(GlobalGameplayTags, GameplayTagContainerProperty);
 
+    }
+
+    private bool DrawEditing(SerializedProperty GameplayTagContainerProperty)
+    {
+        EditorGUILayout.BeginHorizontal();
+        SerializedProperty NameProperty = GameplayTagContainerProperty.FindPropertyRelative("Name");
+        EditorGUILayout.LabelField(NameProperty.stringValue + ": ", GUILayout.MaxWidth(200));
+        GUILayout.FlexibleSpace();
+
+        SerializedProperty EditableProperty = GameplayTagContainerProperty.FindPropertyRelative("bIsEditable");
+        SerializedProperty EditingProperty = GameplayTagContainerProperty.FindPropertyRelative("bIsEditing");
+
+        if (EditableProperty.boolValue)
+        {
+            EditorGUILayout.LabelField("Edit", GUILayout.MaxWidth(25));
+            EditingProperty.boolValue = EditorGUILayout.Toggle("", EditingProperty.boolValue, GUILayout.MaxWidth(15));
+        }
+
+        EditorGUILayout.Space(15);
+        EditorGUILayout.EndHorizontal();
+
+        return EditingProperty.boolValue;
     }
 
 }

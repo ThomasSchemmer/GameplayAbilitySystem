@@ -11,6 +11,14 @@ public class GameplayTagRegularContainer
 {
     public List<string> IDs = new();
     public bool bIsEditing = false;
+    public string Name;
+    public bool bIsEditable;
+
+    public GameplayTagRegularContainer(string Name, bool bIsEditable = true)
+    {
+        this.Name = Name;
+        this.bIsEditable = bIsEditable;
+    }
 
     public void Verify()
     {

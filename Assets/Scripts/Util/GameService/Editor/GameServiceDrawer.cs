@@ -20,16 +20,6 @@ public class GameServiceDrawer : PropertyDrawer
         EditorGUILayout.EndHorizontal();
         GUILayout.FlexibleSpace();
 
-        EditorGUILayout.BeginHorizontal(GUILayout.MaxWidth(50));
-        EditorGUILayout.LabelField("Editor", GUILayout.MaxWidth(40));
-        EditorProperty.boolValue = EditorGUILayout.Toggle(EditorProperty.boolValue);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal(GUILayout.MaxWidth(50));
-        EditorGUILayout.LabelField("Game", GUILayout.MaxWidth(40));
-        GameProperty.boolValue = EditorGUILayout.Toggle(GameProperty.boolValue);
-        EditorGUILayout.EndHorizontal();
-
         EditorGUILayout.EndHorizontal();
     }
 

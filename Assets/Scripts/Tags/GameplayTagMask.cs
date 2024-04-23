@@ -7,7 +7,7 @@ using UnityEngine;
  */
 public class GameplayTagMask 
 {
-    private HashSet<string> Mask;
+    private HashSet<string> Mask = new();
 
     public void Set(string ID)
     {

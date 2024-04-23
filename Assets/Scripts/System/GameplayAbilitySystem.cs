@@ -7,6 +7,14 @@ public class GameplayAbilitySystem : GameService
 {
     public List<GameplayAbilityBehaviour> Behaviours = new();
 
+    public void Update()
+    {
+        foreach (var Behaviour in Behaviours)
+        {
+            Behaviour.Tick(Time.deltaTime);
+        }
+    }
+
     public void Register(GameplayAbilityBehaviour Behaviour)
     {
         Behaviours.Add(Behaviour);
@@ -19,5 +27,14 @@ public class GameplayAbilitySystem : GameService
 
     protected override void StopServiceInternal() {}
 
+    public bool TryApplyEffectTo(GameplayAbilityBehaviour Target, GameplayEffect Effect)
+    {
+        if (!Target.HasTags(Effect.ApplicationRequirementTags.IDs))
+            return false;
 
+        Effect.SetTarget(Target);
+        Target.AddEffect(Effect);
+        Effect.Execute();
+        return true;
+    }
 }
