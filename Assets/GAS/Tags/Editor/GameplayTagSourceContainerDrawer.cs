@@ -21,12 +21,12 @@ public class GameplayTagSourceContainerDrawer : PropertyDrawer
 
     private void DisplayGlobalSource(SerializedProperty GameplayTagContainerProperty)
     {
-        SerializedProperty TagsProperty = GameplayTagContainerProperty.FindPropertyRelative("Tags");
+        SerializedProperty TokensProperty = GameplayTagContainerProperty.FindPropertyRelative("Tokens");
 
         ContainerSourceDrawerLibrary.DisplayAddTag(GameplayTagContainerProperty);
         EditorGUILayout.Space(5);
-        ContainerDrawerLibrary.DisplayButtons(TagsProperty);
+        ContainerDrawerLibrary.DisplayButtons(TokensProperty);
         EditorGUILayout.Space(5);
-        ContainerSourceDrawerLibrary.DisplaySourceTags(TagsProperty);
+        ContainerSourceDrawerLibrary.DisplaySourceTags(TokensProperty);
     }
 }

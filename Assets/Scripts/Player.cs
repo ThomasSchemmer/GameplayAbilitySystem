@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public GameplayEffect BurnEffect;
+    public GameplayEffect BurnEffect, DousingEffect;
 
     void Update()
+    {
+        CheckForBurning();
+        CheckForDousing();
+    }
+
+    private void CheckForBurning()
     {
         if (!Input.GetKeyDown(KeyCode.B))
             return;
@@ -15,5 +21,17 @@ public class Player : MonoBehaviour
             return;
 
         GAS.TryApplyEffectTo(GameplayAbilityBehaviour.Get(this.gameObject), BurnEffect);
+    }
+
+    private void CheckForDousing()
+    {
+
+        if (!Input.GetKeyDown(KeyCode.D))
+            return;
+
+        if (!Game.TryGetService(out GameplayAbilitySystem GAS))
+            return;
+
+        GAS.TryApplyEffectTo(GameplayAbilityBehaviour.Get(this.gameObject), DousingEffect);
     }
 }

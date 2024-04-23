@@ -10,20 +10,31 @@ public class GameplayAbilityBehaviour : MonoBehaviour
         {
             System.Register(this);
         });
+        Attributes.Initialize();
     }
 
     public void Tick(float Delta)
     {
+        // Effects can register themselfs on attributes
         foreach (GameplayEffect ActiveEffect in ActiveEffects)
         {
-            if (!HasTags(ActiveEffect.OngoingRequirementTags.IDs))
+            bool bIsExpired = ActiveEffect.IsExpired(Delta);
+            bool bHasTags = HasTags(ActiveEffect.OngoingRequirementTags.IDs);
+            if (!bHasTags || bIsExpired)
             {
-                RemoveEffect(ActiveEffect);
+                MarkedForRemovalEffects.Add(ActiveEffect);
                 continue;
             }
 
             ActiveEffect.Tick(Delta);
         }
+        foreach (GameplayEffect ToRemoveEffect in MarkedForRemovalEffects)
+        {
+            RemoveEffect(ToRemoveEffect);
+        }
+
+        // now attributes can be calculated
+        Attributes.Tick();
     }
 
     public void AddTag(string ID) {
@@ -75,12 +86,37 @@ public class GameplayAbilityBehaviour : MonoBehaviour
     public void AddEffect(GameplayEffect Effect) { 
         ActiveEffects.Add(Effect);
         AddTags(Effect.GrantedTags.IDs);
+
+        if (Effect.GrantedAbility == null || Effect.DurationPolicy == GameplayEffect.Duration.Instant)
+            return;
+
+        GrantAbility(Effect.GrantedAbility);
     }
 
     public void RemoveEffect(GameplayEffect Effect)
     {
         ActiveEffects.Remove(Effect);
         RemoveTags(Effect.GrantedTags.IDs);
+
+        if (Effect.GrantedAbility == null || Effect.DurationPolicy == GameplayEffect.Duration.Instant)
+            return;
+
+        GrantedAbilities.Remove(Effect.GrantedAbility);
+    }
+
+    public void GrantAbility(GameplayAbility Ability)
+    {
+        GrantedAbilities.Add(Ability);
+    }
+
+    public bool HasAbility(GameplayAbility Ability)
+    {
+        return GrantedAbilities.Contains(Ability);
+    }
+
+    public void RemoveAbility(GameplayAbility Ability)
+    {
+        GrantedAbilities.Remove(Ability);
     }
 
     public static GameplayAbilityBehaviour Get(GameObject GameObject)
@@ -90,6 +126,8 @@ public class GameplayAbilityBehaviour : MonoBehaviour
 
     public AttributeSet Attributes;
     private List<GameplayEffect> ActiveEffects = new();
+    private List<GameplayEffect> MarkedForRemovalEffects = new();
+    private List<GameplayAbility> GrantedAbilities = new();
     private GameplayTagMask GameplayTagMask = new();
 
     public delegate void OnTagsChanged();

@@ -429,7 +429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 999d63121281ccf40a2357703ecb0751, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BurnEffect: {fileID: 11400000, guid: f5153a9171b8ca74f9a3947225c1a1a2, type: 2}
+  BurnEffect: {fileID: 11400000, guid: 2b944f62eace5964985cbb1ce9d4c661, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -32,9 +32,25 @@ public class GameplayAbilitySystem : GameService
         if (!Target.HasTags(Effect.ApplicationRequirementTags.IDs))
             return false;
 
-        Effect.SetTarget(Target);
-        Target.AddEffect(Effect);
-        Effect.Execute();
+        GameplayEffect Clone = Effect.GetByInstancing();
+
+        Clone.SetTarget(Target);
+        Target.AddEffect(Clone);
+        Clone.Execute();
+        return true;
+    }
+
+    public bool TryActivateAbility(GameplayAbilityBehaviour Target, GameplayAbility Ability)
+    {
+        if (!Target.HasTags(Ability.ActivationRequiredTags.IDs))
+            return false;
+
+        if (!Target.HasAbility(Ability))
+        {
+            Target.GrantAbility(Ability);
+        }
+
+        Ability.ActivateAbility();
         return true;
     }
 }

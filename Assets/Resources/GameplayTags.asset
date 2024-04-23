@@ -13,36 +13,40 @@ MonoBehaviour:
   m_Name: GameplayTags
   m_EditorClassIdentifier: 
   Container:
-    Tags:
-    - ID: 626f2467-9afe-458d-a9db-b8ae0a3a287f
-      Token: Tag
+    Tokens:
+    - ID: ee520485-c93a-4a14-ac0c-624880b9554b
+      Token: Status
       Depth: 0
       bIsFolded: 0
-    - ID: 47462c53-0f97-4c38-84eb-0e11fde7a0e3
-      Token: Heal
+    - ID: d5a4fd56-1918-484e-bc9b-ea1ed4737b5b
+      Token: Ailment
       Depth: 1
       bIsFolded: 0
-    - ID: cc719b61-f8f7-4b66-9000-467e31c40f97
-      Token: Holy
+    - ID: 6a1329c5-a854-4357-bbcc-03b08e135cc5
+      Token: Stunned
       Depth: 2
       bIsFolded: 0
-    - ID: 30897c6d-2fc5-4c89-a8e6-f7aa016df917
-      Token: SpellDamage
-      Depth: 1
-      bIsFolded: 0
-    - ID: b59999b4-299f-4cc8-baaa-ae2a7a58ced0
-      Token: Fire
+    - ID: d325812c-ea9f-4c99-9a56-20f1279afa3e
+      Token: Physical
       Depth: 2
       bIsFolded: 0
-    - ID: 2c0fe617-a29e-4819-9f1d-8bc110d10266
-      Token: Element
-      Depth: 1
+    - ID: 32d1cb25-cb4b-4aa6-af97-ded6a9617092
+      Token: Bleeding
+      Depth: 3
       bIsFolded: 0
-    - ID: 6ff950b9-a065-41ef-b674-d17e8369c296
-      Token: Cold
+    - ID: fec57e69-d0ad-4ca9-92d4-602e955899f5
+      Token: Elemental
       Depth: 2
       bIsFolded: 0
-    - ID: 01ce12ac-b293-451c-af6b-1b267871ae7e
-      Token: Fire
-      Depth: 2
+    - ID: d78840fe-c66c-4bcb-9c35-a0a114aa6e86
+      Token: Shocked
+      Depth: 3
+      bIsFolded: 0
+    - ID: 619c823e-fd87-4089-a67b-ca689aff58aa
+      Token: Frozen
+      Depth: 3
+      bIsFolded: 0
+    - ID: a71aeb7e-d542-46cb-9f8e-e7bfdd1e22ba
+      Token: Burning
+      Depth: 3
       bIsFolded: 0

@@ -30,15 +30,15 @@ public class ContainerSourceDrawerLibrary : ContainerDrawerLibrary
         if (TagToAddString.Equals(GlobalTagToAddString))
             return;
 
-        SerializedProperty TagsProperty = GameplayTagContainerProperty.FindPropertyRelative("Tags");
+        SerializedProperty TokensProperty = GameplayTagContainerProperty.FindPropertyRelative("Tokens");
 
         string[] Tokens = TagToAddString.Split(GameplayTagToken.Divisor);
         int FoundDepth = -1;
         int TokenIndex = 0;
         int FoundIndex = -1;
-        for (int i = 0; i < TagsProperty.arraySize; i++)
+        for (int i = 0; i < TokensProperty.arraySize; i++)
         {
-            SerializedProperty TargetProp = TagsProperty.GetArrayElementAtIndex(i);
+            SerializedProperty TargetProp = TokensProperty.GetArrayElementAtIndex(i);
             SerializedProperty TargetTokenProp = TargetProp.FindPropertyRelative("Token");
             SerializedProperty TargetDepthProp = TargetProp.FindPropertyRelative("Depth");
 
@@ -56,7 +56,7 @@ public class ContainerSourceDrawerLibrary : ContainerDrawerLibrary
 
         if (FoundIndex == -1)
         {
-            FoundIndex = TagsProperty.arraySize - 1;
+            FoundIndex = TokensProperty.arraySize - 1;
             FoundDepth = -1;
         }
 
@@ -64,9 +64,9 @@ public class ContainerSourceDrawerLibrary : ContainerDrawerLibrary
         for (int i = TokenIndex; i < Tokens.Length; i++)
         {
             int TargetIndex = FoundIndex + InsertCount;
-            TagsProperty.InsertArrayElementAtIndex(TargetIndex);
-            TagsProperty.serializedObject.ApplyModifiedProperties();
-            SerializedProperty NewTagProp = TagsProperty.GetArrayElementAtIndex(TargetIndex + 1);
+            TokensProperty.InsertArrayElementAtIndex(TargetIndex);
+            TokensProperty.serializedObject.ApplyModifiedProperties();
+            SerializedProperty NewTagProp = TokensProperty.GetArrayElementAtIndex(TargetIndex + 1);
             SerializedProperty NewTokenProp = NewTagProp.FindPropertyRelative("Token");
             SerializedProperty NewDepthProp = NewTagProp.FindPropertyRelative("Depth");
             SerializedProperty NewIDProp = NewTagProp.FindPropertyRelative("ID");
@@ -77,21 +77,21 @@ public class ContainerSourceDrawerLibrary : ContainerDrawerLibrary
             InsertCount++;
         }
 
-        TagsProperty.serializedObject.ApplyModifiedProperties();
+        TokensProperty.serializedObject.ApplyModifiedProperties();
     }
 
-    public static void DisplaySourceTags(SerializedProperty TagsProperty)
+    public static void DisplaySourceTags(SerializedProperty TokensProperty)
     {
         EditorGUILayout.BeginVertical();
         int FoldDepth = -1;
         Dictionary<int, string> TokenDic = new();
 
-        for (int i = 0; i < TagsProperty.arraySize; i++)
+        for (int i = 0; i < TokensProperty.arraySize; i++)
         {
-            SerializedProperty TagProperty = TagsProperty.GetArrayElementAtIndex(i);
-            SerializedProperty IsFoldedProp = TagProperty.FindPropertyRelative("bIsFolded");
-            SerializedProperty TokenProp = TagProperty.FindPropertyRelative("Token");
-            SerializedProperty DepthProp = TagProperty.FindPropertyRelative("Depth");
+            SerializedProperty TokenProperty = TokensProperty.GetArrayElementAtIndex(i);
+            SerializedProperty IsFoldedProp = TokenProperty.FindPropertyRelative("bIsFolded");
+            SerializedProperty TokenProp = TokenProperty.FindPropertyRelative("Token");
+            SerializedProperty DepthProp = TokenProperty.FindPropertyRelative("Depth");
 
             UpdateDic(TokenDic, TokenProp.stringValue, DepthProp.intValue);
             if (HandleSearching(TokenDic, TokenProp.stringValue, DepthProp.intValue))
@@ -101,7 +101,7 @@ public class ContainerSourceDrawerLibrary : ContainerDrawerLibrary
                 continue;
 
             //instead of using a library here we move the display into the corresponding drawer
-            EditorGUILayout.PropertyField(TagProperty);
+            EditorGUILayout.PropertyField(TokenProperty);
         }
         EditorGUILayout.EndVertical();
     }
